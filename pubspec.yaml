@@ -1,8 +1,8 @@
 name: moblink
 description: A new flutter plugin project.
 version: 0.0.1
-author:
-homepage:
+author: lujh<coder_lujinhui@163.com>
+homepage: http://www.mob.com/product/moblink
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -21,7 +21,7 @@ flutter:
   # be modified. They are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
   plugin:
-    androidPackage: com.example.moblink
+    androidPackage: com.yoozoo.moblink
     pluginClass: MoblinkPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
