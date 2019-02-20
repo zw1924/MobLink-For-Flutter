@@ -1,0 +1,54 @@
+group 'com.example.moblink'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "http://mvn.mob.com/android"
+        }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "http://mvn.mob.com/android"
+        }
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'com.mob.sdk'
+
+MobSDK {
+    appKey "d580ad56b4b5"
+    appSecret "7fcae59a62342e7e2759e9e397c82bdd"
+
+    MobLink {
+        // 若使用经典版，需打开该设置，否则默认为专业版
+        //preferClassicalEdition true
+        version = "3.0.2"
+        uriScheme  "mlink://com.mob.moblink.demo"
+        appLinkHost  "z.t4m.cn"
+    }
+}
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 16
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
