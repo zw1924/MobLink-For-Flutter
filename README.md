@@ -1,6 +1,6 @@
 # MobLink For Flutter
 
-### 本插件是基于MobLink 对Unity3D进行插件扩充支持。目的是方便Unity开发者更方便地集成使用MobLink。
+### 本插件是基于MobLink 对Flutter进行插件扩充支持。目的是方便Flutter开发者更方便地集成使用MobLink。
 
 ## 开始
 
