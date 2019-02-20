@@ -1,14 +1,17 @@
-# moblink
+# MobLink For Flutter
 
-A new flutter plugin project.
+### 本插件是基于MobLink 对Unity3D进行插件扩充支持。目的是方便Unity开发者更方便地集成使用MobLink。
 
-## Getting Started
+## 开始
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.io/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+1. Flutter集成文档 [MobLink-For-Flutter 在线文档](https://pub.dartlang.org/packages/moblink#-installing-tab-)
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+2. iOS平台设置参考[iOS集成文档](http://wiki.mob.com/moblinkpro-2/) 
+
+	* 实现其中的第一点：进行官网后台配置
+	* 第三点的第1.2条，URL Scheme和Universal link配置，
+	* 第三点的第1.3条，MobAppkey和MobAppsecret的配置。
+
+3. Android平台设置参考[Android集成文档](http://wiki.mob.com/moblink-android-doc/)
+
+4. Web平台设置参考[Web端集成文档](http://wiki.mob.com/moblink-web-doc/)
