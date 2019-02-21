@@ -13,5 +13,10 @@
 	* 第三点的第1.3条，MobAppkey和MobAppsecret的配置。
 
 3. Android平台设置参考[Android集成文档](http://wiki.mob.com/moblink-android-doc/)
+	* 实现第一点完成官网后台配置
+	* 在第二点中的第2条，替换appKey、appSecret为您自己的配置
+	* 同时在第二点中的第2条中，需要在MobLink{}内配置以下两项 
+	* uriScheme  "mlink://com.mob.moblink.demo"
+	* appLinkHost  "z.t4m.cn"
 
 4. Web平台设置参考[Web端集成文档](http://wiki.mob.com/moblink-web-doc/)
