@@ -30,11 +30,11 @@ public class MoblinkPlugin implements MethodCallHandler {
     //TODO test
     Log.e("QQQ", " onMethodCall " + call.method);
 
-    if (call.method.equals("getPlatformVersion")) {
+   /* if (call.method.equals("getPlatformVersion")) {
       result.success("Android " + android.os.Build.VERSION.RELEASE);
     } else {
       result.notImplemented();
-    }
+    }*/
 
     switch (call.method) {
       case getMobId:
@@ -46,7 +46,7 @@ public class MoblinkPlugin implements MethodCallHandler {
 
   }
 
-  private void getMobId(MethodCall call, Result result) {
+  private void getMobId(MethodCall call, final Result result) {
     HashMap<String, Object> map = call.arguments();
     HashMap<String, Object> params = (HashMap<String, Object>) map.get("params");
     String path = String.valueOf(map.get("path"));
@@ -61,12 +61,14 @@ public class MoblinkPlugin implements MethodCallHandler {
     MobLink.getMobID(s, new ActionListener() {
       @Override
       public void onResult(Object o) {
-        //Log.e("QQQ", " onResult ===> " + o);
+        Log.e("QQQ", " onResult ===> " + o);
+        result.success(o);
       }
 
       public void onError(Throwable throwable) {
         // TODO 处理错误结果
-        //Log.e("QQQ", " onError ===> " );
+        Log.e("QQQ", " onError ===> "  + throwable.getMessage().toString());
+        result.error(throwable.getMessage().toString(), null, null);
       }
     });
   }
