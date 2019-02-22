@@ -76,12 +76,13 @@
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">static Future&lt;dynamic&gt; restoreScene(Function(MLSDKScene scene) result) {
-
-  Future&lt;dynamic&gt; callback = _channel.invokeMethod(MobLinkMethods.restoreScene.name);
+  Future&lt;dynamic&gt; callback =
+      _channel.invokeMethod(MobLinkMethods.restoreScene.name);
 
   callback.then((dynamic response) {
     if (result != null) {
-      MLSDKScene scenes = new MLSDKScene(response[&quot;path&quot;], response[&quot;params&quot;]);
+      MLSDKScene scenes =
+          new MLSDKScene(response[&quot;path&quot;], response[&quot;params&quot;]);
       scenes.mobid = response[&quot;mobid&quot;];
       scenes.className = response[&quot;className&quot;];
       scenes.rawURL = response[&quot;rawURL&quot;];
@@ -101,7 +102,7 @@
 
 <footer>
   <span class="no-break">
-    moblink 0.0.1
+    moblink 1.0.3
   </span>
 
 </footer>

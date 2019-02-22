@@ -1,6 +1,6 @@
 name: moblink
-description: MobLink为您提供移动端场景还原解决方案。10分钟快速集成即可打破App孤岛，实现Web与App的无缝链接，让App间无缝跳转，加强用户体验，提升App活跃度。
-version: 1.0.0
+description: MobLink provides you with a mobile-side scenario restoration solution. 
+version: 1.0.3
 author: lujh<coder_lujinhui@163.com>
 homepage: https://www.mob.com/product/moblink
 
