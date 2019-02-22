@@ -12,7 +12,8 @@ class MobLinkMethod {
 /// method defines
 class MobLinkMethods {
   static final MobLinkMethod getMobId = MobLinkMethod(name: "getMobId", id: 0);
-  static final MobLinkMethod restoreScene = MobLinkMethod(name: "restoreScene", id: 1);
+  static final MobLinkMethod restoreScene =
+      MobLinkMethod(name: "restoreScene", id: 1);
 }
 
 class MLSDKError extends Error {

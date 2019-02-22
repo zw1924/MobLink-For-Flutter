@@ -21,7 +21,7 @@
 
 <header id="title">
   <ol class="breadcrumbs gt-separated dark hidden-xs">
-    <li class="self-crumb">moblink package</li>
+    <li><a href="https://www.mob.com/product/moblink">moblink package</a></li>
   </ol>
   <div class="self-name">moblink</div>
   <form class="search navbar-right" role="search">
@@ -43,16 +43,13 @@
 
   <div class="col-xs-12 col-sm-9 col-md-8 main-content">
       <section class="desc markdown">
-        <h1 id="moblink">moblink</h1>
-<p>A new flutter plugin project.</p>
-<h2 id="getting-started">Getting Started</h2>
-<p>This project is a starting point for a Flutter
-<a href="https://flutter.io/developing-packages/">plug-in package</a>,
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.</p>
-<p>For help getting started with Flutter, view our 
-<a href="https://flutter.io/docs">online documentation</a>, which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.</p>
+        <h1 id="moblink-for-flutter">MobLink For Flutter</h1>
+<h3 id="moblink-flutterfluttermoblink">本插件是基于MobLink 对Flutter进行插件扩充支持。目的是方便Flutter开发者更方便地集成使用MobLink。</h3>
+<h2 id="">开始</h2><ol><li>
+<p>Flutter集成文档 <a href="https://pub.dartlang.org/packages/moblink#-installing-tab-">MobLink-For-Flutter 在线文档</a></p></li><li>
+<p>iOS平台设置参考<a href="http://wiki.mob.com/moblinkpro-2/">iOS集成文档</a> </p><ul><li>实现其中的第一点：进行官网后台配置</li><li>第三点的第1.2条，URL Scheme和Universal link配置，</li><li>第三点的第1.3条，MobAppkey和MobAppsecret的配置。</li></ul></li><li>
+<p>Android平台设置参考<a href="http://wiki.mob.com/moblink-android-doc/">Android集成文档</a></p><ul><li>实现第一点完成官网后台配置</li><li>在第二点中的第2条，替换appKey、appSecret为您自己的配置</li><li>同时在第二点中的第2条中，需要在MobLink{}内配置以下两项 </li><li>uriScheme  "mlink://com.mob.moblink.demo"</li><li>appLinkHost  "z.t4m.cn"</li></ul></li><li>
+<p>Web平台设置参考<a href="http://wiki.mob.com/moblink-web-doc/">Web端集成文档</a></p></li></ol>
       </section>
       
         <section class="summary">
@@ -82,7 +79,7 @@ samples, guidance on mobile development, and a full API reference.</p>
 
 <footer>
   <span class="no-break">
-    moblink 0.0.1
+    moblink 1.0.3
   </span>
 
 </footer>

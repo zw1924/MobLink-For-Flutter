@@ -75,17 +75,17 @@
     
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span> </h2>
-      <pre class="language-dart"><code class="language-dart">static Future&lt;dynamic&gt; getMobId(MLSDKScene scene, Function(String mobid, String domain, MLSDKError error) result)  {
-
+      <pre class="language-dart"><code class="language-dart">static Future&lt;dynamic&gt; getMobId(MLSDKScene scene,
+    Function(String mobid, String domain, MLSDKError error) result) {
   Map args = {&quot;path&quot;: scene.path, &quot;params&quot;: scene.params};
 
-  Future&lt;dynamic&gt; callback = _channel.invokeMethod(MobLinkMethods.getMobId.name, args);
+  Future&lt;dynamic&gt; callback =
+      _channel.invokeMethod(MobLinkMethods.getMobId.name, args);
 
   callback.then((dynamic response) {
     if (result != null) {
-      result(response[&quot;mobid&quot;],
-            response[&quot;domain&quot;],
-            MLSDKError(rawData: response[&quot;error&quot;]));
+      result(response[&quot;mobid&quot;], response[&quot;domain&quot;],
+          MLSDKError(rawData: response[&quot;error&quot;]));
     }
   });
   return callback;
@@ -101,7 +101,7 @@
 
 <footer>
   <span class="no-break">
-    moblink 0.0.1
+    moblink 1.0.3
   </span>
 
 </footer>

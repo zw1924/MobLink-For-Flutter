@@ -11,35 +11,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   void getMobId(BuildContext context) {
+    // 设置参数
     MLSDKScene scene =
-          MLSDKScene('/demo/a', {'param1': '123', 'param2': '456'});
-      Moblink.getMobId(scene, (String mobid, String domain, MLSDKError error) {
-        if (mobid != null) {
-          print('得到mobid：' + mobid);
-          showAlert(mobid, context);
-        }
-      });
+        MLSDKScene('/demo/a', {'param1': '123', 'param2': '456'});
+    // 传入 scene , 获取 mobid
+    Moblink.getMobId(scene, (String mobid, String domain, MLSDKError error) {
+      if (mobid != null) {
+        print('得到mobid：' + mobid);
+        showAlert(mobid, context);
+      }
+    });
   }
 
   void getShortUrl(BuildContext context) {
     MLSDKScene scene =
-          MLSDKScene('/demo/b', {'param1': '456', 'param2': '789'});
-      Moblink.getMobId(scene, (String mobid, String domain, MLSDKError error) {
-        if (mobid != null) {
-          print('分享短链:' + domain + mobid);
-          showAlert(domain + mobid, context);
-        }
-      });
+        MLSDKScene('/demo/b', {'param1': '456', 'param2': '789'});
+    Moblink.getMobId(scene, (String mobid, String domain, MLSDKError error) {
+      if (mobid != null) {
+        print('分享短链:' + domain + mobid);
+        showAlert(domain + mobid, context);
+      }
+    });
   }
 
   void showAlert(String text, BuildContext context) {
-
     showDialog(
         context: context,
-        builder: (BuildContext context) =>
-            CupertinoAlertDialog(
+        builder: (BuildContext context) => CupertinoAlertDialog(
                 title: new Text("提示"),
                 content: new Text(text),
                 actions: <Widget>[
@@ -49,8 +48,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.of(context).pop();
                     },
                   )
-                ]
-            ));
+                ]));
   }
 
   Widget _creatRow(String methodName, String methodDes, Function method,
@@ -61,10 +59,7 @@ class _HomePageState extends State<HomePage> {
       },
       child: new Container(
         padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         color: Colors.grey.withAlpha(10),
         child: new Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,23 +92,21 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  
+
   @override
   void initState() {
-
     super.initState();
 
     // 场景还原的回调
     Moblink.restoreScene((MLSDKScene scene) {
       // 根据场景，手动设置跳转
       print('要还原的路径为：' + scene.path);
-      showAlert("要还原的路径为："+ scene.path, context);
+      showAlert("要还原的路径为：" + scene.path, context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: new AppBar(
         title: const Text('MobLink Plugin'),
@@ -127,5 +120,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-  
 }
