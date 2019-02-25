@@ -23,9 +23,9 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-//apply plugin: 'com.mob.sdk'
+apply plugin: 'com.mob.sdk'
 
-/*MobSDK {
+MobSDK {
     appKey "d580ad56b4b5"
     appSecret "7fcae59a62342e7e2759e9e397c82bdd"
 
@@ -35,7 +35,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
         uriScheme  "mlink://com.mob.moblink.demo"
         appLinkHost  "z.t4m.cn"
     }
-}*/
+}
 
 android {
     compileSdkVersion 27
@@ -71,4 +71,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+
 }

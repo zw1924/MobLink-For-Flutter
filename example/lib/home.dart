@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:moblink/moblink.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,14 +12,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
   void getMobId(BuildContext context) {
     // 设置参数
     MLSDKScene scene =
         MLSDKScene('/demo/a', {'param1': '123', 'param2': '456'});
     // 传入 scene , 获取 mobid
     Moblink.getMobId(scene, (String mobid, String domain, MLSDKError error) {
+      print('QQQ mobid回调');
       if (mobid != null) {
-        print('得到mobid：' + mobid);
+        print('QQQ 得到mobid：' + mobid);
         showAlert(mobid, context);
       }
     });
@@ -96,6 +100,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    //Moblink.listenNativeEvent();
 
     // 场景还原的回调
     Moblink.restoreScene((MLSDKScene scene) {
