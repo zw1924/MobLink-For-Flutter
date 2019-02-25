@@ -8,6 +8,24 @@ class Moblink {
   static const MethodChannel _channel =
       const MethodChannel('com.yoozoo.mob/moblink');
 
+  static const EventChannel java_to_flutter = const EventChannel("JAVA_TO_FLUTTER");
+
+  static Future<dynamic> listenNativeEvent() {
+    print("QQQ 我执行了");
+    java_to_flutter.receiveBroadcastStream().listen(_onEvent, onError:_onError);
+    print("QQQ 我执行完了");
+  }
+
+  static Future<dynamic> _onEvent(Object event) {
+    print("QQQ _onEvent");
+    print("onEvent: $event ");
+  }
+
+  static Future<dynamic> _onError(Object error) {
+    print("QQQ _onError");
+    print(error);
+  }
+
   static Future<dynamic> getMobId(MLSDKScene scene,
       Function(String mobid, String domain, MLSDKError error) result) {
     Map args = {"path": scene.path, "params": scene.params};
@@ -40,6 +58,11 @@ class Moblink {
     });
     return callback;
   }
+
+
+
+
+
 }
 
 class MLSDKScene {
