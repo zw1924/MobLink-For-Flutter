@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="API docs for the runtimeType property from the Moblink class, for the Dart programming language.">
-  <title>runtimeType property - Moblink class - moblink_interface library - Dart API</title>
+  <meta name="description" content="API docs for the listenNativeEvent method from the Moblink class, for the Dart programming language.">
+  <title>listenNativeEvent method - Moblink class - moblink_interface library - Dart API</title>
   <!-- required because all the links are pseudo-absolute -->
   <base href="../..">
 
@@ -26,9 +26,9 @@
     <li><a href="index.html">moblink</a></li>
     <li><a href="moblink_interface/moblink_interface-library.html">moblink_interface</a></li>
     <li><a href="moblink_interface/Moblink-class.html">Moblink</a></li>
-    <li class="self-crumb">runtimeType property</li>
+    <li class="self-crumb">listenNativeEvent method</li>
   </ol>
-  <div class="self-name">runtimeType</div>
+  <div class="self-name">listenNativeEvent</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -67,26 +67,24 @@
   </div><!--/.sidebar-offcanvas-->
 
   <div class="col-xs-12 col-sm-9 col-md-8 main-content">
-    <h1>runtimeType property</h1>
+    <h1>listenNativeEvent method</h1>
 
+    <section class="multi-line-signature">
+      <span class="returntype">Future</span>
+      <span class="name ">listenNativeEvent</span>
+(<wbr>)
+      
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">static Future&lt;dynamic&gt; listenNativeEvent() {
+  print(&quot;QQQ 我执行了&quot;);
+  java_to_flutter.receiveBroadcastStream().listen(_onEvent, onError:_onError);
+  print(&quot;QQQ 我执行完了&quot;);
+}</code></pre>
+    </section>
 
-        <section id="getter">
-        
-        <section class="multi-line-signature">
-          <span class="returntype">Type</span>
-          <span class="name ">runtimeType</span>
-  <div class="features">inherited</div>
-</section>
-        
-        <section class="desc markdown">
-  <p>A representation of the runtime type of the object.</p>
-</section>
-<section class="summary source-code" id="source">
-  <h2><span>Implementation</span> </h2>
-  <pre class="language-dart"><code class="language-dart">external Type get runtimeType;</code></pre>
-</section>
-</section>
-        
   </div> <!-- /.main-content -->
 
   <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">

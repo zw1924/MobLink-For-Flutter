@@ -1,7 +1,7 @@
 name: moblink
 description: MobLink provides you with a mobile-side scenario restoration solution. 
-version: 1.0.4
-author: lujh<coder_lujinhui@163.com>
+version: 1.0.5
+author: lujh<mobproducts@163.com>
 homepage: https://www.mob.com/product/moblink
 
 environment:
