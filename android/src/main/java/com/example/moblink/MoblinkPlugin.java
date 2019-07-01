@@ -96,7 +96,10 @@ public class MoblinkPlugin extends Object implements MethodCallHandler, SceneRes
       @Override
       public void onResult(Object o) {
         Log.e("QQQ", " onResult ===> " + o);
-        result.success(o);
+        HashMap resposon =new HashMap<String,String>();
+        resposon.put("mobid",o);
+        resposon.put("domain","");
+        result.success(resposon);
       }
 
       public void onError(Throwable throwable) {

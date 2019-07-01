@@ -16,7 +16,7 @@
     <!--//android:name="io.flutter.app.FlutterApplication"-->
 
     <application
-        android:name="com.example.moblink.MobLinkFlutterApplication"
+        android:name="io.flutter.app.FlutterApplication"
         android:label="moblink_example"
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:name">
