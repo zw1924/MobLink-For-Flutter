@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:moblink/moblink.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   void getMobId(BuildContext context) {
     // 设置参数
     MLSDKScene scene =
-        MLSDKScene('/demo/a', {'param1': '123', 'param2': '456'});
+        MLSDKScene('/scene/a', {'param1': '123', 'param2': '456'});
     // 传入 scene , 获取 mobid
     Moblink.getMobId(scene, (String mobid, String domain, MLSDKError error) {
       print('QQQ mobid回调');
@@ -30,7 +29,7 @@ class _HomePageState extends State<HomePage> {
 
   void getShortUrl(BuildContext context) {
     MLSDKScene scene =
-        MLSDKScene('/demo/b', {'param1': '456', 'param2': '789'});
+        MLSDKScene('/scene/b', {'param1': '456', 'param2': '789'});
     Moblink.getMobId(scene, (String mobid, String domain, MLSDKError error) {
       if (mobid != null) {
         print('分享短链:' + domain + mobid);
@@ -102,13 +101,11 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     //Moblink.listenNativeEvent();
-
-    // 场景还原的回调
-    Moblink.restoreScene((MLSDKScene scene) {
-      // 根据场景，手动设置跳转
-      print('要还原的路径为：' + scene.path);
-      showAlert("要还原的路径为：" + scene.path, context);
-    });
+  
+  Moblink.restoreScene().then((result){
+    print('要还原的路径为：');
+    showAlert("要还原的路径为：" + result.className, context);
+  });
   }
 
   @override

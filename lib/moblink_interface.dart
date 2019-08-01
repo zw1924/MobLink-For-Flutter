@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
-
 import 'package:moblink/moblink_defines.dart';
 
 class Moblink {
@@ -26,8 +24,7 @@ class Moblink {
     print(error);
   }
 
-  static Future<dynamic> getMobId(MLSDKScene scene,
-      Function(String mobid, String domain, MLSDKError error) result) {
+   static Future<dynamic> getMobId(MLSDKScene scene, Function(String mobid, String domain, MLSDKError error) result) {
     Map args = {"path": scene.path, "params": scene.params};
 
     Future<dynamic> callback =
@@ -42,27 +39,19 @@ class Moblink {
     return callback;
   }
 
-  static Future<dynamic> restoreScene(Function(MLSDKScene scene) result) {
-    Future<dynamic> callback =
-        _channel.invokeMethod(MobLinkMethods.restoreScene.name);
-
-    callback.then((dynamic response) {
-      if (result != null) {
-        MLSDKScene scenes =
-            new MLSDKScene(response["path"], response["params"]);
-        scenes.mobid = response["mobid"];
+static Future<dynamic> restoreScene() async {
+    try {
+      dynamic response = await _channel.invokeMethod(MobLinkMethods.restoreScene.name);
+      print(response);
+      MLSDKScene scenes =
+            new MLSDKScene(response["path"]??"", response["params"]);
+        scenes.mobid = response["mobid"]??"";
         scenes.className = response["className"];
         scenes.rawURL = response["rawURL"];
-        result(scenes);
-      }
-    });
-    return callback;
-  }
-
-
-
-
-
+        return scenes;
+    } catch (e) {
+    }
+}
 }
 
 class MLSDKScene {

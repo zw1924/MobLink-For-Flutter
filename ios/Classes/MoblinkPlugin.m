@@ -146,7 +146,7 @@ typedef NS_ENUM(NSUInteger, MLSDKPluginMethod) {
         self.restoreResult(mDic);
     }
     
-    restoreHandler(MLDefault, NO);
+    restoreHandler(NO, MLDefault);
 }
 
 @end
