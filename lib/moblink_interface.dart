@@ -23,6 +23,43 @@ class Moblink {
     print("QQQ _onError");
     print(error);
   }
+//get ShareSDK PrivacyPolicy
+  static Future<dynamic> getPrivacyPolicy(String type,Function(Map data,Map error) result){
+    Map args = {"type": type};
+    Future<dynamic> callback =
+    _channel.invokeMethod(MobLinkMethods.getPrivacyPolicy.name, args);
+    callback.then((dynamic response) {
+      print(response);
+      if (result != null) {
+        result(response["data"],response["error"]);
+      }
+    });
+    return callback;
+  }
+  ///upload user permissionStatus to Share
+  static Future<dynamic> uploadPrivacyPermissionStatus(int status,Function(bool success) result){
+    Map args = {"status": status};
+    Future<dynamic> callback =
+    _channel.invokeMethod(MobLinkMethods.uploadPrivacyPermissionStatus.name, args);
+    callback.then((dynamic response) {
+      print(response);
+      if (result != null) {
+        result(response["success"]);
+      }
+    });
+    return callback;
+  }
+
+  ///setPrivacyWindow Show
+  static Future<dynamic> setAllowShowPrivacyWindow(int show) {
+    Map args = {"show": show};
+    return _channel.invokeMethod(MobLinkMethods.setAllowShowPrivacyWindow.name, args);
+  }
+
+  static Future<dynamic> setPrivacyUI(int backColor,List<int> operationButtonColors){
+    Map args = {"backColor": backColor,"oprationButtonColors":operationButtonColors};
+    return _channel.invokeMethod(MobLinkMethods.setPrivacyUI.name, args);
+  }
 
    static Future<dynamic> getMobId(MLSDKScene scene, Function(String mobid, String domain, MLSDKError error) result) {
     Map args = {"path": scene.path, "params": scene.params};

@@ -14,6 +14,14 @@ class MobLinkMethods {
   static final MobLinkMethod getMobId = MobLinkMethod(name: "getMobId", id: 0);
   static final MobLinkMethod restoreScene =
       MobLinkMethod(name: "restoreScene", id: 1);
+  static final MobLinkMethod uploadPrivacyPermissionStatus =
+  MobLinkMethod(name: "uploadPrivacyPermissionStatus", id: 2);
+  static final MobLinkMethod setAllowShowPrivacyWindow =
+  MobLinkMethod(name: "setAllowShowPrivacyWindow", id: 3);
+  static final MobLinkMethod getPrivacyPolicy =
+  MobLinkMethod(name: "getPrivacyPolicy", id: 4);
+  static final MobLinkMethod setPrivacyUI =
+  MobLinkMethod(name: "setPrivacyUI", id: 5);
 }
 
 class MLSDKError extends Error {

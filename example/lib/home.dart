@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:moblink/moblink.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,6 +13,33 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  static const EventChannel _eventChannel = const EventChannel('JAVA_TO_FLUTTER');
+
+  @override
+  void initState() {
+    super.initState();
+    // 监听开始(传递监听到原生端，用户监听场景还原的数据回传回来)
+    _eventChannel.receiveBroadcastStream().listen(_onEvent, onError: _onError);
+
+     //app后台杀死时候的还原
+
+    Moblink.restoreScene().then((result){
+      print('要还原的路径为：');
+      showAlert("要还原的路径为：" + result.className, context);
+    });
+  }
+
+
+ //app存在后台时候的还原
+
+  void _onEvent(Object event) {
+    print('返回的内容: $event');
+    showAlert('要还原的路径为：$event', context);
+  }
+
+  void _onError(Object error) {
+    print('返回的错误');
+  }
 
   void getMobId(BuildContext context) {
     // 设置参数
@@ -96,20 +124,67 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
+  /// @param 隐私协议返回数据的格式
+  /// POLICY_TYPE_URL = 1
+  /// POLICY_TYPE_TXT = 2
+  void getPrivacyPolicyUrl(BuildContext context) {
+    Moblink.getPrivacyPolicy("1", (Map data, Map error) {
+      String policyData, errorStr;
+      if (data != null) {
+        policyData = data["data"];
+        print("==============>policyData " + policyData);
+      }
 
-    //Moblink.listenNativeEvent();
-  
-  Moblink.restoreScene().then((result){
-    print('要还原的路径为：');
-    showAlert("要还原的路径为：" + result.className, context);
-  });
+      if (error != null) {
+        errorStr = error["error"];
+        print("==============>errorStr " + errorStr);
+      }
+
+      if (policyData != null) {
+        showAlert("隐私协议" + policyData, context);
+      } else if (errorStr != null) {
+        showAlert("隐私协议" + errorStr, context);
+      } else {
+        showAlert("隐私协议" + "获取隐私协议失败", context);
+      }
+    });
+  }
+
+  /// 0 ===> 不同意隐私政策
+  /// 1 ===> 同意
+  void submitPrivacyGrantResult(BuildContext context) {
+    Moblink.uploadPrivacyPermissionStatus(1, (bool success) {
+      if (success == true) {
+        showAlert("隐私协议授权提交结果" + "成功", context);
+      } else {
+        showAlert("隐私协议授权提交结果" + "失败", context);
+      }
+    });
+  }
+
+  ///隐私二次确认框开关设置
+  /// 1 ===> 同意
+  /// 0 ===> 不同意
+  void setAllowDialog(BuildContext context) {
+    Moblink.setAllowShowPrivacyWindow(1);
+  }
+
+  /// 自定义隐私二次确认框UI
+  void setPrivacyUI(BuildContext context) {
+    int BackgroundColorId = 1001;
+    int PositiveBtnColorId = 1002;
+    int setNegativeBtnColorId = 1003;
+
+    List<int> operationButtonColors = new List<int>();
+    operationButtonColors.add(PositiveBtnColorId);
+    operationButtonColors.add(setNegativeBtnColorId);
+
+    Moblink.setPrivacyUI(BackgroundColorId, operationButtonColors);
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: new AppBar(
         title: const Text('MobLink Plugin'),
@@ -119,6 +194,11 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           _creatRow("生成MobId", "path: /demo/a", getMobId, context),
           _creatRow("生成短链", "path: /demo/b", getShortUrl, context),
+          _creatRow("获取隐私协议", "1：url 2.内容", getPrivacyPolicyUrl, context),
+
+          _creatRow("设置隐私协议状态", "请先设置隐私协议状态", submitPrivacyGrantResult, context),
+
+
         ],
       ),
     );

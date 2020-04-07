@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'moblink'
-  s.version          = '0.0.1'
+  s.version          = '0.0.3'
   s.summary          = 'moblink for flutter.'
   s.description      = <<-DESC
 A new flutter plugin project.
