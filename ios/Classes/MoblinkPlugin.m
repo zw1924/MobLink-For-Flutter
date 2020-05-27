@@ -16,14 +16,17 @@ typedef NS_ENUM(NSUInteger, MLSDKPluginMethod) {
 };
 
 
-@interface MoblinkPlugin() <IMLSDKRestoreDelegate>
+@interface MoblinkPlugin() <IMLSDKRestoreDelegate,FlutterStreamHandler>
 
 @property (strong, nonatomic) NSDictionary *methodMap;
 
-@property (copy, nonatomic) FlutterResult restoreResult;
+@property (strong, nonatomic) FlutterEventChannel* channel;
+
+@property (nonatomic, copy) FlutterEventSink  eventSink;
+
 
 @end
-
+static NSString *const receiverStr = @"MOBLINK_TO_FLUTTER";
 @implementation MoblinkPlugin
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar
@@ -42,6 +45,8 @@ typedef NS_ENUM(NSUInteger, MLSDKPluginMethod) {
         @"setAllowShowPrivacyWindow":@(MLSDKPluginMethodSetAllowShowPrivacyWindow),
     };
     [registrar addMethodCallDelegate:instance channel:channel];
+    FlutterEventChannel* e_channel = [FlutterEventChannel eventChannelWithName:receiverStr binaryMessenger:[registrar messenger]];
+    [e_channel setStreamHandler:instance];
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result
@@ -122,45 +127,25 @@ typedef NS_ENUM(NSUInteger, MLSDKPluginMethod) {
 }
 
 - (void)_setAllowShowPrivacyWindow:(NSDictionary *)args result:(FlutterResult)result{
-    [MobSDK setAllowShowPrivacyWindow:[args[@"show"]boolValue]];
-    result(@1);
+
 }
 
 - (void)_getPrivacyPolicy:(NSDictionary *)args result:(FlutterResult)result{
-    [MobSDK getPrivacyPolicy:args[@"type"] compeletion:^(NSDictionary * _Nullable data, NSError * _Nullable error) {
+    [MobSDK getPrivacyPolicy:args[@"type"] language:args[@"language"] compeletion:^(NSDictionary * _Nullable data, NSError * _Nullable error) {
         result(@{
             @"data":@{@"data":(data[@"content"]?:[NSNull null])},
             @"error":error?@{@"error":@"获取失败"}:[NSNull null]
-        });
+               });
     }];
 }
 
 - (void)_setPrivacyUI:(NSDictionary *)args result:(FlutterResult)result{
-    UIColor *color = nil;
-    NSMutableArray *colors = [NSMutableArray array];
-    NSString *colorString = args[@"backColor"];
-    if ([colorString isKindOfClass:[NSNumber class]]) {
-        color = [MOBFColor colorWithRGB:[colorString integerValue]];
-    }
-    
-    NSArray *colorsNumber = args[@"oprationButtonColors"];
-    if ([colorsNumber isKindOfClass:[NSArray class]]) {
-        for (NSNumber *number in colorsNumber) {
-            id colorElement = [MOBFColor colorWithRGB:[number integerValue]];
-            if (colorElement) {
-                [colors addObject:colorElement];
-            }
-        }
-    }
-    [MobSDK setPrivacyBackgroundColor:color operationButtonColor:colors];
-    result(nil);
+
 }
 // 监听还原
 - (void)_restoreScene:(FlutterResult)result
 {
     [MobLink setDelegate:self];
-    
-    self.restoreResult = result;
 }
 
 - (id)_covertError:(NSError *)error
@@ -176,40 +161,47 @@ typedef NS_ENUM(NSUInteger, MLSDKPluginMethod) {
 
 - (void)IMLSDKWillRestoreScene:(MLSDKScene *)scene Restore:(void (^)(BOOL, RestoreStyle))restoreHandler
 {
-    NSString *path = scene.path;
-    NSString *mobid = scene.mobid;
-    NSString *rawURL = scene.rawURL;
-    NSString *className = scene.className;
-    NSDictionary *params = scene.params;
-    
-    NSMutableDictionary *mDic = [NSMutableDictionary dictionary];
-    if (path)
-    {
-        [mDic addEntriesFromDictionary:@{@"path" : path}];
+    if (_eventSink) {
+        NSString *path = scene.path;
+        NSString *mobid = scene.mobid;
+        NSString *rawURL = scene.rawURL;
+        NSString *className = scene.className;
+        NSDictionary *params = scene.params;
+        NSMutableDictionary *mDic = [NSMutableDictionary dictionary];
+        if (path)
+        {
+            [mDic addEntriesFromDictionary:@{@"path" : path}];
+        }
+        if (mobid)
+        {
+            [mDic addEntriesFromDictionary:@{@"mobid" : mobid}];
+        }
+        if (rawURL)
+        {
+            [mDic addEntriesFromDictionary:@{@"rawURL" : rawURL}];
+        }
+        if (className)
+        {
+            [mDic addEntriesFromDictionary:@{@"className" : className}];
+        }
+        if (params)
+        {
+            [mDic addEntriesFromDictionary:@{@"params" : params}];
+        }
+        self.eventSink(mDic);
     }
-    if (mobid)
-    {
-        [mDic addEntriesFromDictionary:@{@"mobid" : mobid}];
-    }
-    if (rawURL)
-    {
-        [mDic addEntriesFromDictionary:@{@"rawURL" : rawURL}];
-    }
-    if (className)
-    {
-        [mDic addEntriesFromDictionary:@{@"className" : className}];
-    }
-    if (params)
-    {
-        [mDic addEntriesFromDictionary:@{@"params" : params}];
-    }
-    
-    if (self.restoreResult)
-    {
-        self.restoreResult(mDic);
-    }
-    
-    restoreHandler(NO, MLDefault);
 }
+
+- (FlutterError* _Nullable)onListenWithArguments:(id _Nullable)arguments
+                                       eventSink:(FlutterEventSink)events {
+    self.eventSink = events;
+    return nil;
+}
+
+- (FlutterError *)onCancelWithArguments:(id)arguments{
+    self.eventSink = nil;
+    return nil;
+}
+
 
 @end

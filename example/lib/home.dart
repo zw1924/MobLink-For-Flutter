@@ -12,29 +12,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  static const EventChannel _eventChannel = const EventChannel('JAVA_TO_FLUTTER');
+  static const EventChannel _eventChannel =
+      const EventChannel('JAVA_TO_FLUTTER');
 
   @override
   void initState() {
     super.initState();
+
+    Moblink.uploadPrivacyPermissionStatus(1, (bool success) {});
+    //app后台杀死时候的还原
+    Moblink.restoreScene((MLSDKScene scene) {
+      showAlert('要还原的路径为：' + scene.className, context);
+      print('要还原的路径为：' + scene.className);
+    });
+
     // 监听开始(传递监听到原生端，用户监听场景还原的数据回传回来)
     _eventChannel.receiveBroadcastStream().listen(_onEvent, onError: _onError);
 
-     //app后台杀死时候的还原
-
-    Moblink.restoreScene().then((result){
+    //app后台杀死时候的还原
+    Moblink.restoreScene_Android().then((result) {
       print('要还原的路径为：');
-      showAlert("要还原的路径为：" + result.className, context);
+      showAlert("要还原的路径为[app杀死]：" + result, context);
     });
   }
 
-
- //app存在后台时候的还原
-
+  //app存在后台时候的还原
   void _onEvent(Object event) {
     print('返回的内容: $event');
-    showAlert('要还原的路径为：$event', context);
+    if (null != event) {
+      showAlert('要还原的路径为[活着]：$event', context);
+    }
   }
 
   void _onError(Object error) {
@@ -165,9 +172,7 @@ class _HomePageState extends State<HomePage> {
   ///隐私二次确认框开关设置
   /// 1 ===> 同意
   /// 0 ===> 不同意
-  void setAllowDialog(BuildContext context) {
-    Moblink.setAllowShowPrivacyWindow(1);
-  }
+  void setAllowDialog(BuildContext context) {}
 
   /// 自定义隐私二次确认框UI
   void setPrivacyUI(BuildContext context) {
@@ -178,13 +183,10 @@ class _HomePageState extends State<HomePage> {
     List<int> operationButtonColors = new List<int>();
     operationButtonColors.add(PositiveBtnColorId);
     operationButtonColors.add(setNegativeBtnColorId);
-
-    Moblink.setPrivacyUI(BackgroundColorId, operationButtonColors);
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: new AppBar(
         title: const Text('MobLink Plugin'),
@@ -195,10 +197,8 @@ class _HomePageState extends State<HomePage> {
           _creatRow("生成MobId", "path: /demo/a", getMobId, context),
           _creatRow("生成短链", "path: /demo/b", getShortUrl, context),
           _creatRow("获取隐私协议", "1：url 2.内容", getPrivacyPolicyUrl, context),
-
-          _creatRow("设置隐私协议状态", "请先设置隐私协议状态", submitPrivacyGrantResult, context),
-
-
+          _creatRow(
+              "设置隐私协议状态", "请先设置隐私协议状态", submitPrivacyGrantResult, context),
         ],
       ),
     );

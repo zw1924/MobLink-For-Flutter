@@ -3,44 +3,59 @@ import 'package:flutter/services.dart';
 import 'package:moblink/moblink_defines.dart';
 
 class Moblink {
-  static const MethodChannel _channel =
-      const MethodChannel('com.yoozoo.mob/moblink');
+  static Moblink _instance;
+  MethodChannel _channel;
+  EventChannel _eventChannel;
+  Function(MLSDKScene scne) moblinkCallBack;
+  Function(Object error) moblinkError;
 
-  static const EventChannel java_to_flutter = const EventChannel("JAVA_TO_FLUTTER");
-
-  static Future<dynamic> listenNativeEvent() {
-    print("QQQ 我执行了");
-    java_to_flutter.receiveBroadcastStream().listen(_onEvent, onError:_onError);
-    print("QQQ 我执行完了");
+  // 静态、同步、私有访问点
+  static Moblink sharedInstance() {
+    if (_instance == null) {
+      _instance = Moblink();
+      _instance._channel = MethodChannel('com.yoozoo.mob/moblink');
+      _instance._eventChannel = EventChannel("MOBLINK_TO_FLUTTER");
+    }
+    return _instance;
   }
 
-  static Future<dynamic> _onEvent(Object event) {
-    print("QQQ _onEvent");
-    print("onEvent: $event ");
+  void _onEvent(event) {
+    if (moblinkCallBack == null) return;
+    MLSDKScene scenes = new MLSDKScene(event["path"] ?? "", event["params"]);
+    scenes.mobid = event["mobid"] ?? "";
+    scenes.className = event["className"];
+    scenes.rawURL = event["rawURL"];
+    moblinkCallBack(scenes);
   }
 
-  static Future<dynamic> _onError(Object error) {
+  Future<dynamic> _onError(Object error) {
     print("QQQ _onError");
     print(error);
   }
+
 //get ShareSDK PrivacyPolicy
-  static Future<dynamic> getPrivacyPolicy(String type,Function(Map data,Map error) result){
+  static Future<dynamic> getPrivacyPolicy(
+      String type, Function(Map data, Map error) result) {
     Map args = {"type": type};
-    Future<dynamic> callback =
-    _channel.invokeMethod(MobLinkMethods.getPrivacyPolicy.name, args);
+    Future<dynamic> callback = Moblink.sharedInstance()
+        ._channel
+        .invokeMethod(MobLinkMethods.getPrivacyPolicy.name, args);
     callback.then((dynamic response) {
       print(response);
       if (result != null) {
-        result(response["data"],response["error"]);
+        result(response["data"], response["error"]);
       }
     });
     return callback;
   }
+
   ///upload user permissionStatus to Share
-  static Future<dynamic> uploadPrivacyPermissionStatus(int status,Function(bool success) result){
+  static Future<dynamic> uploadPrivacyPermissionStatus(
+      int status, Function(bool success) result) {
     Map args = {"status": status};
-    Future<dynamic> callback =
-    _channel.invokeMethod(MobLinkMethods.uploadPrivacyPermissionStatus.name, args);
+    Future<dynamic> callback = Moblink.sharedInstance()
+        ._channel
+        .invokeMethod(MobLinkMethods.uploadPrivacyPermissionStatus.name, args);
     callback.then((dynamic response) {
       print(response);
       if (result != null) {
@@ -50,22 +65,13 @@ class Moblink {
     return callback;
   }
 
-  ///setPrivacyWindow Show
-  static Future<dynamic> setAllowShowPrivacyWindow(int show) {
-    Map args = {"show": show};
-    return _channel.invokeMethod(MobLinkMethods.setAllowShowPrivacyWindow.name, args);
-  }
-
-  static Future<dynamic> setPrivacyUI(int backColor,List<int> operationButtonColors){
-    Map args = {"backColor": backColor,"oprationButtonColors":operationButtonColors};
-    return _channel.invokeMethod(MobLinkMethods.setPrivacyUI.name, args);
-  }
-
-   static Future<dynamic> getMobId(MLSDKScene scene, Function(String mobid, String domain, MLSDKError error) result) {
+  static Future<dynamic> getMobId(MLSDKScene scene,
+      Function(String mobid, String domain, MLSDKError error) result) {
     Map args = {"path": scene.path, "params": scene.params};
 
-    Future<dynamic> callback =
-        _channel.invokeMethod(MobLinkMethods.getMobId.name, args);
+    Future<dynamic> callback = Moblink.sharedInstance()
+        ._channel
+        .invokeMethod(MobLinkMethods.getMobId.name, args);
 
     callback.then((dynamic response) {
       if (result != null) {
@@ -76,31 +82,44 @@ class Moblink {
     return callback;
   }
 
-static Future<dynamic> restoreScene() async {
+  static Future restoreScene(Function(MLSDKScene scene) callback) async {
+    Moblink.sharedInstance()._eventChannel.receiveBroadcastStream().listen(
+        Moblink.sharedInstance()._onEvent,
+        onError: Moblink.sharedInstance()._onError);
+    Moblink.sharedInstance()
+        ._channel
+        .invokeMethod(MobLinkMethods.restoreScene.name);
+    Moblink.sharedInstance().moblinkCallBack = callback;
+  }
+
+  static Future<dynamic> restoreScene_Android() async {
     try {
-      dynamic response = await _channel.invokeMethod(MobLinkMethods.restoreScene.name);
+      dynamic response =
+          await _instance._channel.invokeMethod(MobLinkMethods.restoreScene.name);
       print(response);
       MLSDKScene scenes =
-            new MLSDKScene(response["path"]??"", response["params"]);
-        scenes.mobid = response["mobid"]??"";
-        scenes.className = response["className"];
-        scenes.rawURL = response["rawURL"];
-        return scenes;
-    } catch (e) {
-    }
-}
+          new MLSDKScene(response["path"] ?? "", response["params"]);
+      scenes.mobid = response["mobid"] ?? "";
+      scenes.className = response["className"];
+      scenes.rawURL = response["rawURL"];
+      return scenes;
+    } catch (e) {}
+  }
 }
 
 class MLSDKScene {
   // path (required)
   String path;
+
   // custom parameter (Optional)
   Map params;
 
   // mobid（Readonly）
   String mobid;
+
   // class name of the corresponding path（Readonly）
   String className;
+
   // original link（Readonly）
   String rawURL;
 

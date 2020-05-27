@@ -1,11 +1,12 @@
 name: moblink
 description: MobLink provides you with a mobile-side scenario restoration solution. 
-version: 3.3.7
+version: 3.3.9
 author: lujh<mobproducts@163.com>
 homepage: https://www.mob.com/product/moblink
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  #sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
