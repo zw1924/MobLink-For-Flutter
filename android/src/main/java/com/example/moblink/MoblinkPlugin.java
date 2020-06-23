@@ -2,10 +2,12 @@ package com.example.moblink;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.mob.MobSDK;
+import com.mob.PrivacyPolicy;
 import com.mob.moblink.ActionListener;
 import com.mob.moblink.MobLink;
 import com.mob.moblink.RestoreSceneListener;
@@ -83,6 +85,25 @@ public class MoblinkPlugin extends Object implements MethodCallHandler, SceneRes
         } else {
             Log.e("WWW", " ===== FlutterEventChannel.eventSink 为空 需要检查一下 ===== ");
         }
+    }
+
+    private void queryPrivacy() {
+        // 异步方法
+        MobSDK.getPrivacyPolicyAsync(MobSDK.POLICY_TYPE_URL, new PrivacyPolicy.OnPolicyListener() {
+            @Override
+            public void onComplete(PrivacyPolicy data) {
+                if (data != null) {
+                    // 富文本内容
+                    String text = data.getContent();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                // 请求失败
+                //Log.e(TAG, "隐私协议查询结果：失败 " + t);
+            }
+        });
     }
 
     /**
